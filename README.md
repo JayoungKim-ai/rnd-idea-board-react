@@ -1,17 +1,52 @@
-# React + Vite
+# 💡 R&D 아이디어 보드
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+연구·기술 아이디어를 등록하고 관리하는 React 웹 애플리케이션입니다.
 
-Currently, two official plugins are available:
+## 주요 기능
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **아이디어 등록** — 제목 / 분야(카테고리) / 설명을 입력해 카드로 추가
+- **아이디어 삭제** — 카드 오른쪽 하단의 삭제 버튼으로 개별 카드 제거
+- **제목 정렬** — 오름차순(A→Z) / 내림차순(Z→A) 버튼으로 카드 목록 정렬
 
-## React Compiler
+## 기술 스택
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| 역할 | 라이브러리 |
+|------|-----------|
+| UI 프레임워크 | React 19 |
+| 빌드 도구 | Vite 8 |
+| 아이콘 | react-icons 5 |
+| 린터 | ESLint 10 |
 
-## Expanding the ESLint configuration
+## 프로젝트 구조
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-"# render-idea-board-react" 
+```
+src/
+├── components/
+│   ├── Header.jsx   # 헤더 컴포넌트
+│   └── Card.jsx     # 아이디어 카드 컴포넌트
+├── App.jsx          # 메인 컴포넌트 (상태 관리)
+├── App.css          # 스타일
+└── main.jsx         # 진입점
+```
+
+## 시작하기
+
+### 설치
+
+```bash
+npm install
+```
+
+### 개발 서버 실행
+
+```bash
+npm run dev
+```
+
+브라우저에서 [http://localhost:5173](http://localhost:5173) 에 접속합니다.
+
+### 빌드
+
+```bash
+npm run build
+```
