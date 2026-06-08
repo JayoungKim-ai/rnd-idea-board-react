@@ -1,0 +1,134 @@
+/* src/index.css */
+/* 전체 기본 */
+body {
+  font-family: sans-serif;
+  background: #f5f6f8;
+  color: #222;
+  margin: 0;
+  padding: 24px;
+}
+
+/* 헤더 */
+.board-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.board-header p {
+  color: #666;
+}
+
+/* 입력 폼 */
+.form-section {
+  max-width: 640px;
+  margin: 0 auto 32px;
+}
+.idea-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+}
+.idea-form input,
+.idea-form select,
+.idea-form textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.idea-form button {
+  padding: 10px;
+  background: #3b6cff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* 카드 목록: 격자 배치 */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+/* 카드 한 장 */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.card-category {
+  display: inline-block;
+  background: #eef1ff;
+  color: #3b6cff;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.card-title {
+  margin: 8px 0 4px;
+}
+.card-desc {
+  flex: 1;
+  color: #555;
+}
+.card-delete {
+  align-self: flex-end;
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: #fff;
+  color: #e53935;
+  border: 1px solid #e53935;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.card-delete:hover {
+  background: #e53935;
+  color: white;
+}
+
+/* 정렬 UI */
+.sort-section {
+  max-width: 960px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sort-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+}
+.sort-buttons {
+  display: flex;
+  gap: 8px;
+}
+.sort-button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  color: #555;
+  cursor: pointer;
+}
+.sort-button:hover {
+  border-color: #3b6cff;
+  color: #3b6cff;
+}
+.sort-button.active {
+  background: #3b6cff;
+  border-color: #3b6cff;
+  color: #fff;
+}
