@@ -1,8 +1,9 @@
 import "./App.css";
 import Header from "./components/Header";
 import Card from "./components/Card";
-import { useState } from "react"; //상태를 관리하는 함수(값을 담는 그릇, 값을 변경하는 함수로 구성되어 있음)
+import { useState, useEffect } from "react"; //상태를 관리하는 함수(값을 담는 그릇, 값을 변경하는 함수로 구성되어 있음)
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
+import { supabase } from "./supabaseClient"; // Supabase 클라이언트
 
 function App() {
   // 입력되는 값의 상태 관리
@@ -10,27 +11,30 @@ function App() {
   const [category, setCategory] = useState("AI");
   const [desc, setDesc] = useState("");
 
-  // 등록된 아이디어의 상태 관리
-  const [ideas, setIdeas] = useState([
-    {
-      category: "AI",
-      title: "제조 공정 불량 자동 검출",
-      desc: "생산 라인 영상을 학습해 불량품을 실시간으로 가려내는 시스템.",
-    },
-    {
-      category: "바이오",
-      title: "단백질 구조 예측 도우미",
-      desc: "신약 후보 물질의 단백질 구조를 빠르게 추정해 연구 기간을 단축.",
-    },
-    {
-      category: "반도체",
-      title: "소재 결함 데이터셋 구축",
-      desc: "반도체 소재의 결함 사례를 모아 분석용 데이터로 정리.",
-    },
-  ]);
+  // 등록된 아이디어의 상태 관리 (초기값: 빈 배열 → DB에서 불러옴)
+  const [ideas, setIdeas] = useState([]);
 
   // 정렬 순서 상태 관리 (null: 기본순, "asc": 오름차순, "desc": 내림차순)
   const [sortOrder, setSortOrder] = useState(null);
+
+  // 앱이 처음 실행될 때 Supabase에서 아이디어 목록을 불러옵니다
+  useEffect(() => {
+    fetchIdeas();
+  }, []);
+
+  // Supabase ideas 테이블에서 전체 데이터를 조회하는 함수
+  async function fetchIdeas() {
+    const { data, error } = await supabase
+      .from("ideas") // 테이블 이름
+      .select("*"); // 모든 컬럼 조회
+
+    if (error) {
+      console.error("데이터 불러오기 실패:", error.message);
+      return;
+    }
+    // DB 컬럼명 description → 컴포넌트에서 사용하는 desc로 변환
+    setIdeas(data.map((item) => ({ ...item, desc: item.description })));
+  }
 
   // 정렬이 적용된 아이디어 목록 (ideas 원본은 유지)
   const sortedIdeas = [...ideas].sort((a, b) => {
@@ -39,8 +43,8 @@ function App() {
     return 0;
   });
 
-  // 아이디어 등록 함수 (state에 값 추가)
-  function addIdea() {
+  // 아이디어 등록 함수 (Supabase에 INSERT)
+  async function addIdea() {
     if (title.trim() === "") {
       alert("제목을 입력하세요");
       return;
@@ -49,16 +53,33 @@ function App() {
       alert("설명을 입력하세요");
       return;
     }
-    const newIdea = { category: category, title: title, desc: desc };
-    setIdeas([...ideas, newIdea]);
+
+    const { error } = await supabase
+      .from("ideas")
+      .insert([{ category, title, description: desc }]); // DB 컬럼명은 description
+
+    if (error) {
+      console.error("등록 실패:", error.message);
+      return;
+    }
+
+    // 등록 후 목록을 다시 불러와 화면을 최신 상태로 갱신
+    await fetchIdeas();
     setTitle("");
     setCategory("AI");
     setDesc("");
   }
 
-  // 아이디어 삭제 함수 (해당 인덱스 카드 제거)
-  function deleteIdea(index) {
-    setIdeas(ideas.filter((_, i) => i !== index));
+  // 아이디어 삭제 함수 (Supabase에서 DELETE)
+  async function deleteIdea(id) {
+    const { error } = await supabase.from("ideas").delete().eq("id", id); // id가 일치하는 행만 삭제
+
+    if (error) {
+      console.error("삭제 실패:", error.message);
+      return;
+    }
+
+    await fetchIdeas(); // 삭제 후 목록 갱신
   }
 
   return (
@@ -138,13 +159,13 @@ function App() {
 
         {/* 카드 목록: 등록된 아이디어 */}
         <section className="card-grid">
-          {sortedIdeas.map((idea, index) => (
+          {sortedIdeas.map((idea) => (
             <Card
-              key={`${idea.title}-${index}`}
+              key={idea.id}
               category={idea.category}
               title={idea.title}
               desc={idea.desc}
-              onDelete={() => deleteIdea(ideas.indexOf(idea))}
+              onDelete={() => deleteIdea(idea.id)}
             />
           ))}
         </section>
