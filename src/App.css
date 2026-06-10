@@ -8,6 +8,31 @@ body {
   padding: 24px;
 }
 
+/* 네비게이션 바 */
+.navbar {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.nav-link {
+  padding: 8px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #555;
+  background: #e9ecef;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-link:hover {
+  background: #dee2e6;
+  color: #222;
+}
+.nav-link.active {
+  background: #4f8ef7;
+  color: white;
+}
+
 /* 헤더 */
 .board-header {
   text-align: center;
